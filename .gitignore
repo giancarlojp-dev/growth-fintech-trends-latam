@@ -1,0 +1,37 @@
+# Virtual Environment (carpeta completa)
+venv/
+.venv/
+env/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyc
+
+# IDE settings
+.vscode/
+.idea/
+*.swp
+
+# Datos locales (pueden ser pesados)
+data/raw/*.csv
+data/processed/*.csv
+
+# Credenciales (¡NUNCA subir!)
+.env
+credentials.json
+config/secrets.py
+
+# Archivos de sistema
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+```
