@@ -1,6 +1,5 @@
 import pandas as pd
 
-
 def clean_trends_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     """
