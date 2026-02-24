@@ -18,31 +18,36 @@ def run_pipeline():
 
     logging.info("Starting ETL pipeline...")
     
-    # Extract 
-    logging.info("Extracting data from Google Trends...")
-    raw_df = fetch_trends_data()
+    try:
+        # Extract 
+        logging.info("Extracting data from Google Trends...")
+        raw_df = fetch_trends_data()
 
-    if raw_df.empty: 
-        logging.warning("No data extracted. Pipeline stopped")
-        return
+        if raw_df.empty: 
+            logging.warning("No data extracted. Pipeline stopped")
+            return
 
-    #Guardar raw
-    raw_df.to_csv(RAW_PATH, index=False)
-    logging.info(f"Raw data saved to {RAW_PATH}")
+        #Guardar raw
+        raw_df.to_csv(RAW_PATH, index=False)
+        logging.info(f"Raw data saved to {RAW_PATH}")
 
-    #Transform
-    logging.info("Transforming data...")
-    clean_df = transform_pipeline(raw_df)
+        #Transform
+        logging.info("Transforming data...")
+        clean_df = transform_pipeline(raw_df)
 
-    if clean_df.empty: 
-        logging.warning("No data after transformation. Pipeline stopped.")
-        return 
+        if clean_df.empty: 
+            logging.warning("No data after transformation. Pipeline stopped.")
+            return 
 
-    #Guardar processed
-    clean_df.to_csv(PROCESSED_PATH, index=False)
-    logging.info(f"Processed data saved to {PROCESSED_PATH}")
+        #Guardar processed
+        clean_df.to_csv(PROCESSED_PATH, index=False)
+        logging.info(f"Processed data saved to {PROCESSED_PATH}")
 
-    logging.info("Pipeline completed successfully")
+        logging.info("Pipeline completed successfully")
+
+    except Exception as e:
+        logging.error(f"Pipeline failed: {str(e)}", exc_info=True)
+        raise
 
 if __name__ == "__main__":
     setup_logging()
