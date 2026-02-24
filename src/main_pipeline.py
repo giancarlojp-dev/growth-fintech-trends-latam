@@ -5,6 +5,7 @@ import logging
 from src.extract.google_trends import fetch_trends_data
 from src.transform.clean_transform import transform_pipeline
 from src.config.settings import RAW_PATH, PROCESSED_PATH
+from src.load.supabase_loader import upload_dataframe
 
 
 def setup_logging():
@@ -13,7 +14,7 @@ def setup_logging():
         format="%(asctime)s - %(levelname)s - %(message)s"
     )
 
-def run_pipeline():
+def run_pipeline(load_to_db: bool = True):
 
     logging.info("Starting ETL pipeline...")
     
@@ -40,7 +41,12 @@ def run_pipeline():
 
         #Guardar processed
         clean_df.to_csv(PROCESSED_PATH, index=False)
-        logging.info(f"Processed data saved to {PROCESSED_PATH}")
+
+        #Load
+        if load_to_db:
+            logging.info("Loading data to Supabase...")
+            upload_dataframe(clean_df)
+            logging.info("Upload completed")
 
         logging.info("Pipeline completed successfully")
 
@@ -51,4 +57,4 @@ def run_pipeline():
 if __name__ == "__main__":
     setup_logging()
     run_pipeline()
-    
+
