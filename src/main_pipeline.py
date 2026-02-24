@@ -4,9 +4,8 @@ import logging
 
 from src.extract.google_trends import fetch_trends_data
 from src.transform.clean_transform import transform_pipeline
+from src.config.settings import RAW_PATH, PROCESSED_PATH
 
-RAW_PATH = "data/raw/google_trends_raw.csv"
-PROCESSED_PATH = "data/processed/google_trends_processed.csv"
 
 def setup_logging():
     logging.basicConfig(
