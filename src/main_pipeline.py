@@ -15,7 +15,6 @@ def setup_logging():
     )
 
 def run_pipeline(load_to_db: bool = True):
-
     logging.info("Starting ETL pipeline...")
     
     try:
