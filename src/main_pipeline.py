@@ -38,7 +38,7 @@ def run_pipeline(load_to_db: bool = True):
                         all_data.append(df)
 
                     # evitar rate limiting
-                    time.sleep(random.uniform(5, 9))
+                    time.sleep(random.uniform(10, 18))
 
                 except Exception as e:
                     logging.error(f"Error fetching {keyword}-{country_code}: {e}")

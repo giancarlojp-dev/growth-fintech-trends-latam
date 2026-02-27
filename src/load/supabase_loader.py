@@ -21,24 +21,33 @@ def get_supabase_client() -> Client:
 
 def upload_dataframe(df: pd.DataFrame, table_name: str = "fintech_trends"):
     """ Upload pandas dataframe to Supabase table. """
-
+ 
     if df.empty:
         logging.warning("Attempted to upload empty dataframe.")
-        return
-
-    client = get_supabase_client()
-    records = df.to_dict(orient="records")
+        return None
 
     try:
-        response = client.table(table_name).insert(records).execute()
+      
+        df = df.copy()
+      
+        if 'date' in df.columns:
+            df['date'] = df['date'].astype(str)
+      
+        records = df.to_dict(orient="records")
+        
+        client = get_supabase_client()
+        
+        response = client.table(table_name).upsert(records).execute()
 
         if response.data:
-            logging.info(f"Inserted {len(response.data)} rows into {table_name}")
+            logging.info(f" Inserted/Updated {len(response.data)} rows into {table_name}")
         else:
-            logging.warning("Insert completed but no data returned.")
-
+            logging.warning(" Insert completed but no data returned.")
+        
+        return response
+            
     except Exception as e:
-        logging.error(f"Upload failed: {str(e)}")
+        logging.error(f" Upload failed: {str(e)}")
         raise
 
 def test_connection():
