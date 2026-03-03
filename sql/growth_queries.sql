@@ -1,39 +1,31 @@
--- =========================================
--- VIEW 1: Average interest by country
--- =========================================
 
-CREATE OR REPLACE VIEW vw_country_avg_interest AS
+-- Growth by country and keyword
+
+WITH ranked_data AS (
+    SELECT
+        country_code,
+        keyword,
+        date,
+        interest_score,
+        FIRST_VALUE(interest_score) OVER (
+            PARTITION BY country_code, keyword
+            ORDER BY date
+        ) AS first_value,
+        LAST_VALUE(interest_score) OVER (
+            PARTITION BY country_code, keyword
+            ORDER BY date
+            ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING
+        ) AS last_value
+    FROM fintech_trends
+)
+
 SELECT
     country_code,
-    AVG(interest_score) AS avg_interest,
-    STDDEV(interest_score) AS volatility
-FROM fintech_trends
-GROUP BY country_code;
-
-
--- =========================================
--- VIEW 2: Average interest by keyword
--- =========================================
-
-CREATE OR REPLACE VIEW vw_keyword_avg_interest AS
-SELECT
     keyword,
-    AVG(interest_score) AS avg_interest,
-    STDDEV(interest_score) AS volatility
-FROM fintech_trends
-GROUP BY keyword;
-
-
--- =========================================
--- VIEW 3: Monthly aggregated trend
--- =========================================
-
-CREATE OR REPLACE VIEW vw_monthly_trends AS
-SELECT
-    DATE_TRUNC('month', date) AS month,
-    country_code,
-    keyword,
-    AVG(interest_score) AS monthly_avg
-FROM fintech_trends
-GROUP BY month, country_code, keyword
-ORDER BY month;
+    ROUND(
+        (last_value - first_value)::numeric / NULLIF(first_value, 0),
+        4
+    ) AS growth_rate
+FROM ranked_data
+GROUP BY country_code, keyword, first_value, last_value
+ORDER BY growth_rate DESC;

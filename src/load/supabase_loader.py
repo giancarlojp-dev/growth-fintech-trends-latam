@@ -37,7 +37,9 @@ def upload_dataframe(df: pd.DataFrame, table_name: str = "fintech_trends"):
         
         client = get_supabase_client()
         
-        response = client.table(table_name).upsert(records).execute()
+        response = client.table(table_name)\
+            .upsert(records, on_conflict='date,country_code,keyword')\
+            .execute()
 
         if response.data:
             logging.info(f" Inserted/Updated {len(response.data)} rows into {table_name}")
