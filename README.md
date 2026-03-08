@@ -302,9 +302,9 @@ jupyter notebook notebooks/01_eda.ipynb
 
 **Giancarlo Jacobo**
 
-- 🔗 LinkedIn: [tu-perfil](https://www.linkedin.com/in/giancarlo-jacobo-pachas-2b687a2b2/)
-- 🐙 GitHub: [@tu-usuario](https://github.com/giancarlojp-dev)
-- 📧 Email: tu-email@ejemplo.com
+- 🔗 LinkedIn: [giancarlo-jacobo-pachas](https://www.linkedin.com/in/giancarlo-jacobo-pachas-2b687a2b2/)
+- 🐙 GitHub: [@giancarlojp-dev](https://github.com/giancarlojp-dev)
+- 📧 Email: gianjacobo@gmail.com
 
 ---
 
